@@ -7,19 +7,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 public class SplashScreen extends AppCompatActivity {
 
     public void openMainActivity() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        } , 2000);
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }, 2000);
     }
 
     @Override
@@ -29,8 +25,8 @@ public class SplashScreen extends AppCompatActivity {
         getSupportActionBar().hide();
 
         //ask for coarse location permission in order to open the main activity
-        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
             openMainActivity();
         }
@@ -43,8 +39,8 @@ public class SplashScreen extends AppCompatActivity {
             openMainActivity();
         } else {
             //ask for permission again
-            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             } else {
                 openMainActivity();
             }
