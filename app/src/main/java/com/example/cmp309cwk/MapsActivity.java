@@ -3,15 +3,20 @@ package com.example.cmp309cwk;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.SystemClock;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.cmp309cwk.databinding.ActivityMapsBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -20,10 +25,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -32,6 +41,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker h;
     private FusedLocationProviderClient fusedLocationClient;
 
+    private ArrayList<LatLng> latlong = new ArrayList<>();
+    private ArrayList<LatLng> geofenceList = new ArrayList<>();
+
+
+    private GeofencingClient geofencingClient;
+
+    private double totalDistance = 0;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +59,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+
+        //credit: https://stackoverflow.com/questions/51054247/chronometer-showing-just-minutes-and-hours
+        //--------------------------------------------------------------------------------------------------
+        Chronometer timeElapsed = (Chronometer) findViewById(R.id.chronometer);
+
+        timeElapsed.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
+            @Override
+            public void onChronometerTick(Chronometer cArg) {
+                long time = SystemClock.elapsedRealtime() - cArg.getBase();
+                int h   = (int)(time /3600000);
+                int m = (int)(time - h*3600000)/60000;
+                int s= (int)(time - h*3600000- m*60000)/1000 ;
+                String hh = h < 10 ? "0"+h: h+"";
+                String mm = m < 10 ? "0"+m: m+"";
+                String ss = s < 10 ? "0"+s: s+"";
+                cArg.setText(hh+":"+mm+":"+ss);
+            }
+        });
+
+        timeElapsed.setBase(SystemClock.elapsedRealtime());
+        timeElapsed.start();
+        //---------------------------------------------------------------------------------------------------
+
+
+
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -57,6 +104,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     });
         }
 
+
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(5000);
@@ -65,6 +113,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 locationCallback, Looper.getMainLooper());
 
     }
+
+
 
     LocationCallback locationCallback = new LocationCallback(){
         @Override
@@ -77,16 +127,79 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
                 h.setPosition(currentLocation);
 
+                if(!latlong.isEmpty()) {
+                    LatLng last = latlong.get(latlong.size() - 1);
+                    float[] results = new float[1];
+                    Location.distanceBetween(last.latitude, last.longitude, currentLocation.latitude, currentLocation.longitude, results);
+                    float distance = results[0] / 1000;
+                    totalDistance += distance;
+                    TextView distanceText = findViewById(R.id.txtViewDistance);
+                    distanceText.setText("Distance Travelled: " + String.format("%.2f", totalDistance) + " KM");
+
+                }
+
+
+                latlong.add(currentLocation);
+                drawGPSLine(latlong);
             }
         }
     };
 
+
+    public void drawGPSLine(ArrayList<LatLng> gpsPoints) {
+        PolylineOptions line = new PolylineOptions().width(5).color(Color.BLUE);
+
+        for (int i = 0; i < gpsPoints.size(); i++) {
+            line.add(gpsPoints.get(i));
+        }
+        mMap.addPolyline(line);
+    }
+
+
+    public void addCircle(ArrayList<LatLng> geoFenceCoordinates) {
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.radius(75);
+        circleOptions.strokeColor(Color.BLACK);
+        circleOptions.fillColor(Color.LTGRAY);
+        circleOptions.strokeWidth(5);
+
+        for (int i = 0; i < geoFenceCoordinates.size(); i++) {
+            circleOptions.center(geoFenceCoordinates.get(i));
+            mMap.addCircle(circleOptions);
+        }
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng z = new LatLng(0, 0);
         h = mMap.addMarker(new MarkerOptions().position(z).title("My Location"));
+
+        geofenceList = new ArrayList<>();
+
+        LatLng tannadice_park = new LatLng(56.47479113892371, -2.968978643868099);
+        LatLng dens_park = new LatLng(56.47512756806344, -2.971774961627042);
+        LatLng abertay_university = new LatLng(56.46341960060735, -2.973959916879307);
+        LatLng dundee_university = new LatLng(56.4583691719005, -2.982174988044316);
+        LatLng va_dundee = new LatLng(56.45759278960625, -2.966939170857703);
+        LatLng dundee_airport = new LatLng(56.454275573348546, -3.01583558804444);
+        LatLng overgate = new LatLng(56.460182912789605, -2.972678302024439);
+        LatLng wellgate = new LatLng(56.46433610732626, -2.9693356285278263);
+
+        geofenceList.add(tannadice_park);
+        geofenceList.add(dens_park);
+        geofenceList.add(abertay_university);
+        geofenceList.add(dundee_university);
+        geofenceList.add(va_dundee);
+        geofenceList.add(dundee_airport);
+        geofenceList.add(overgate);
+        geofenceList.add(wellgate);
+
+
+
+
+        addCircle(geofenceList);
+
     }
 
 

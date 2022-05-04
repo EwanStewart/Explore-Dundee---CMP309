@@ -99,7 +99,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 app:backgroundTint="@null"
-                android:background="#bbbbbb" />
+                android:background="#D3D3D3" />
 
 
 
