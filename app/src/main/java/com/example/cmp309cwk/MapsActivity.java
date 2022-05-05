@@ -239,13 +239,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i("TAG", "Geofences added");
+                        Log.i("TAG", "Geofence success");
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i("FAILED", "Geofences added");
+                        Log.i("TAG", "Geofence failed");
                     }
                 });
 
