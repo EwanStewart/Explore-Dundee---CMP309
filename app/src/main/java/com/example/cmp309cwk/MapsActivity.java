@@ -6,12 +6,14 @@ import static com.google.android.gms.location.Geofence.NEVER_EXPIRE;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
@@ -60,6 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Geofence> geofenceList = new ArrayList<Geofence>();
     public double totalDistance = 0;
     Chronometer timeElapsed;
+
+
 
 
     @Override
@@ -158,6 +162,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         switch (v.getId()) {
             case R.id.button1:
                 Intent intent = new Intent(this, uploadActivity.class);
+
+                ArrayList<String> landmarks = new ArrayList<>();
+                SharedPreferences mSharedPreference1 =  PreferenceManager.getDefaultSharedPreferences(MapsActivity.this);
+                int size = mSharedPreference1.getInt("size", 0);
+                Log.i("size", String.valueOf(size));
+
+                for(int i=0;i<size;i++)
+                {
+                    landmarks.add(mSharedPreference1.getString("landmark" + i, null));
+                }
+
+                //log the landmarks
+                for(int i=0;i<landmarks.size();i++)
+                {
+                    Log.i("landmarks",landmarks.get(i));
+                }
+
+
+                // SharedPreferences.Editor editor = mSharedPreference1.edit();
+                //editor.clear();
+               // editor.commit();
+
 
                 intent.putExtra("time", timeElapsed.getText());
                 intent.putExtra("distance", totalDistance);
