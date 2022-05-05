@@ -3,4 +3,5 @@
     <string name="explore_dundee">Explore Dundee</string>
     <string name="hello" />
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="home">Home</string>
 </resources>

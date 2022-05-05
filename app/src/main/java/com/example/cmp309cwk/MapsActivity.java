@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
@@ -57,7 +58,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GeofencingClient geofencingClient;
     private PendingIntent geofencePendingIntent;
     private ArrayList<Geofence> geofenceList = new ArrayList<Geofence>();
-    private double totalDistance = 0;
+    public double totalDistance = 0;
+    Chronometer timeElapsed;
 
 
     @Override
@@ -67,10 +69,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.button1.setOnClickListener(this::onClick);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+
+        timeElapsed = (Chronometer) findViewById(R.id.chronometer);
 
         //credit: https://stackoverflow.com/questions/51054247/chronometer-showing-just-minutes-and-hours
         //--------------------------------------------------------------------------------------------------
-        Chronometer timeElapsed = (Chronometer) findViewById(R.id.chronometer);
 
         timeElapsed.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -147,6 +153,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     };
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button1:
+                Intent intent = new Intent(this, uploadActivity.class);
+
+                intent.putExtra("time", timeElapsed.getText());
+                intent.putExtra("distance", totalDistance);
+
+                startActivity(intent);
+                break;
+        }
+    }
 
 
     private PendingIntent getGeofencePendingIntent() {
