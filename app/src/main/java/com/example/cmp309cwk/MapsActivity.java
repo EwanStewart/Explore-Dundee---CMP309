@@ -1,22 +1,30 @@
 package com.example.cmp309cwk;
 
 
+import static com.google.android.gms.location.Geofence.NEVER_EXPIRE;
+
 import android.Manifest;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.cmp309cwk.databinding.ActivityMapsBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -30,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
@@ -42,14 +51,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient fusedLocationClient;
 
     private ArrayList<LatLng> latlong = new ArrayList<>();
-    private ArrayList<LatLng> geofenceList = new ArrayList<>();
+    private ArrayList<LatLng> pointsOfInterest = new ArrayList<>();
 
 
     private GeofencingClient geofencingClient;
-
+    private PendingIntent geofencePendingIntent;
+    private ArrayList<Geofence> geofenceList = new ArrayList<Geofence>();
     private double totalDistance = 0;
-
-
 
 
     @Override
@@ -60,31 +68,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(binding.getRoot());
 
 
-
         //credit: https://stackoverflow.com/questions/51054247/chronometer-showing-just-minutes-and-hours
         //--------------------------------------------------------------------------------------------------
         Chronometer timeElapsed = (Chronometer) findViewById(R.id.chronometer);
 
-        timeElapsed.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
+        timeElapsed.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer cArg) {
                 long time = SystemClock.elapsedRealtime() - cArg.getBase();
-                int h   = (int)(time /3600000);
-                int m = (int)(time - h*3600000)/60000;
-                int s= (int)(time - h*3600000- m*60000)/1000 ;
-                String hh = h < 10 ? "0"+h: h+"";
-                String mm = m < 10 ? "0"+m: m+"";
-                String ss = s < 10 ? "0"+s: s+"";
-                cArg.setText(hh+":"+mm+":"+ss);
+                int h = (int) (time / 3600000);
+                int m = (int) (time - h * 3600000) / 60000;
+                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+                String hh = h < 10 ? "0" + h : h + "";
+                String mm = m < 10 ? "0" + m : m + "";
+                String ss = s < 10 ? "0" + s : s + "";
+                cArg.setText(hh + ":" + mm + ":" + ss);
             }
         });
 
         timeElapsed.setBase(SystemClock.elapsedRealtime());
         timeElapsed.start();
         //---------------------------------------------------------------------------------------------------
-
-
-
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -115,8 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-    LocationCallback locationCallback = new LocationCallback(){
+    LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             if (locationResult == null) {
@@ -127,7 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
                 h.setPosition(currentLocation);
 
-                if(!latlong.isEmpty()) {
+                if (!latlong.isEmpty()) {
                     LatLng last = latlong.get(latlong.size() - 1);
                     float[] results = new float[1];
                     Location.distanceBetween(last.latitude, last.longitude, currentLocation.latitude, currentLocation.longitude, results);
@@ -144,6 +147,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     };
+
+
+    private PendingIntent getGeofencePendingIntent() {
+        if (geofencePendingIntent != null) {
+            return geofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceBroadcastReceiver.class);
+        geofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return geofencePendingIntent;
+    }
+
+    public void buildGeofence(int ID, LatLng latLng, float radius) {
+        final boolean add = geofenceList.add(new Geofence.Builder()
+                .setRequestId(Integer.toString(ID))
+                .setCircularRegion(latLng.latitude, latLng.longitude, radius)
+                .setExpirationDuration(NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build());
+    }
 
 
     public void drawGPSLine(ArrayList<LatLng> gpsPoints) {
@@ -169,13 +191,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofences(geofenceList);
+        return builder.build();
+    }
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng z = new LatLng(0, 0);
         h = mMap.addMarker(new MarkerOptions().position(z).title("My Location"));
+        int radius = 75;
+        geofencingClient = LocationServices.getGeofencingClient(this);
 
-        geofenceList = new ArrayList<>();
+
+        pointsOfInterest = new ArrayList<>();
 
         LatLng tannadice_park = new LatLng(56.47479113892371, -2.968978643868099);
         LatLng dens_park = new LatLng(56.47512756806344, -2.971774961627042);
@@ -186,19 +219,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng overgate = new LatLng(56.460182912789605, -2.972678302024439);
         LatLng wellgate = new LatLng(56.46433610732626, -2.9693356285278263);
 
-        geofenceList.add(tannadice_park);
-        geofenceList.add(dens_park);
-        geofenceList.add(abertay_university);
-        geofenceList.add(dundee_university);
-        geofenceList.add(va_dundee);
-        geofenceList.add(dundee_airport);
-        geofenceList.add(overgate);
-        geofenceList.add(wellgate);
+        pointsOfInterest.add(tannadice_park);
+        pointsOfInterest.add(dens_park);
+        pointsOfInterest.add(abertay_university);
+        pointsOfInterest.add(dundee_university);
+        pointsOfInterest.add(va_dundee);
+        pointsOfInterest.add(dundee_airport);
+        pointsOfInterest.add(overgate);
+        pointsOfInterest.add(wellgate);
 
+        for (int i = 0; i < pointsOfInterest.size(); i++) {
+            buildGeofence(i, pointsOfInterest.get(i), radius);
+        }
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("TAG", "Geofences added");
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("FAILED", "Geofences added");
+                    }
+                });
 
-
-        addCircle(geofenceList);
+        addCircle(pointsOfInterest);
 
     }
 
