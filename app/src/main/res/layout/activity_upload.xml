@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtTotalTime" />
 
     <RadioButton
-        android:id="@+id/normal"
+        android:id="@+id/rbPublic"
         android:layout_width="350dp"
         android:layout_height="86dp"
         android:layout_marginStart="30dp"

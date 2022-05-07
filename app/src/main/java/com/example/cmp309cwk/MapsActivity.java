@@ -174,14 +174,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     intent.putExtra("landmarksVisited", landmarksVisited);
                 }
 
-
-
-
-
                 intent.putExtra("time", timeElapsed.getText());
                 intent.putExtra("distance", totalDistance);
 
                 startActivity(intent);
+                finish();
                 break;
         }
     }
