@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "556413557323",
+    "firebase_url": "https://cmp309-96a3e-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "cmp309-96a3e",
+    "storage_bucket": "cmp309-96a3e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556413557323:android:24b653f08f2a2b1db80bce",
+        "android_client_info": {
+          "package_name": "com.example.cmp309cwk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556413557323-8nis94mj2cgvtscr8t15niobvdln4njr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_EHNu-IVuc_-DmeWL6G8BoQxI7jz039U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556413557323-8nis94mj2cgvtscr8t15niobvdln4njr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556413557323:android:f4bdb0d373fa5544b80bce",
+        "android_client_info": {
+          "package_name": "uk.ac.abertay.cmp309.week8"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556413557323-8nis94mj2cgvtscr8t15niobvdln4njr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_EHNu-IVuc_-DmeWL6G8BoQxI7jz039U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556413557323-8nis94mj2cgvtscr8t15niobvdln4njr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
