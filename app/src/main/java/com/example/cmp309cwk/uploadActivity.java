@@ -1,11 +1,11 @@
 package com.example.cmp309cwk;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,10 +29,8 @@ public class uploadActivity extends AppCompatActivity {
         public String totalDistance;
         public String totalTime;
         public String landmarksVisitedString;
-        public String status;
 
-        public User(String status, String totalDistance, String totalTime, String landmarksVisitedString) {
-            this.status = status;
+        public User(String totalDistance, String totalTime, String landmarksVisitedString) {
             this.totalDistance = totalDistance;
             this.totalTime = totalTime;
             this.landmarksVisitedString = landmarksVisitedString;
@@ -85,12 +83,14 @@ public class uploadActivity extends AppCompatActivity {
                 landmarksVisitedString = bundle.getString("landmarksVisited");
                 landmarksVisitedString = landmarksVisitedString.substring(1);
 
-                RadioButton pub = findViewById(R.id.rbPublic);
-                boolean status = pub.isChecked();
 
-                user.put("activity_data", new User(String.valueOf(status), String.valueOf(bundle.getDouble("distance")), bundle.getString("time"), landmarksVisitedString));
+
+                user.put("activity_data", new User(String.valueOf(bundle.getDouble("distance")), bundle.getString("time"), landmarksVisitedString));
 
                 userRef.setValue(user);
+                Intent intent = new Intent(uploadActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         }
         );
