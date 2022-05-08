@@ -3,10 +3,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#D3D3D3"
@@ -59,11 +60,21 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!--main content start-->
-        <!-- STUFF HERE -->
-        <!--main content end-->
+        <include
+            layout="@layout/activity_activities_list"
+            android:layout_width="399dp"
+            android:layout_height="553dp" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        tools:context=".MainActivity"/>
+
+
 
     <!-- footer start -->
     <LinearLayout

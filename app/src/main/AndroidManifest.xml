@@ -28,7 +28,8 @@
             android:name=".GeofenceBroadcastReceiver"
             android:enabled="true"
             android:priority="999">
-            android:exported="true"></receiver>
+            android:exported="true">
+        </receiver>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -50,6 +51,15 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".ActivitiesListActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
