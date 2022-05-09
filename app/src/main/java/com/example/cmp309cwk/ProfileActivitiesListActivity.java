@@ -1,15 +1,13 @@
 package com.example.cmp309cwk;
 
-import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,8 +18,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.UUID;
 
-public class ActivitiesListActivity extends AppCompatActivity {
+public class ProfileActivitiesListActivity extends AppCompatActivity {
 
     private ListView list;
     private ArrayList<String[]> activities = new ArrayList<>();
@@ -31,30 +30,18 @@ public class ActivitiesListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_profile);
 
-        findViewById(R.id.btnStartMaps).setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(ActivitiesListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(ActivitiesListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            } else {
-                Intent intent = new Intent(ActivitiesListActivity.this, MapsActivity.class);
-                startActivity(intent);
-            }
-
-        });
-
-        findViewById(R.id.btnProfile).setOnClickListener(v -> {
-            Intent intent = new Intent(ActivitiesListActivity.this, ProfileActivitiesListActivity.class);
-            startActivity(intent);
-        });
-
-        findViewById(R.id.btnSettings).setOnClickListener(v -> {
-            Intent intent = new Intent(ActivitiesListActivity.this, SettingsActivity.class);
-            startActivity(intent);
+        //onclick of home button go to main activity
+        findViewById(R.id.btnHome).setOnClickListener(v -> {
             finish();
         });
 
-
+        findViewById(R.id.btnSettings).setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivitiesListActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("activities");
@@ -95,6 +82,16 @@ public class ActivitiesListActivity extends AppCompatActivity {
 
     private void populateList(){
         activities.sort(Comparator.comparing(o -> o[0])); //sort object by date time
+
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+        String userID = sharedPreferences.getString("userID", UUID.randomUUID().toString());
+
+
+        for (int i = 0; i < activities.size(); i++) {
+            if (!activities.get(i)[4].equals(userID)) {
+                activities.remove(i);
+            }
+        }
         Collections.reverse(activities);  //reverse the order
 
         ActivitiesAdapter adapter = new ActivitiesAdapter(this, activities);

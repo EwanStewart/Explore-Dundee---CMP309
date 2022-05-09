@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class SplashScreen extends AppCompatActivity {
 
-    public void openMainActivity() {
+    public void openMainActivity() {    //open main activity after 2 seconds
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(SplashScreen.this, MainActivity.class);
             startActivity(intent);
@@ -26,27 +26,28 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         getSupportActionBar().hide();
 
-        if (getSharedPreferences("PREFS", MODE_PRIVATE).getString("username", null) == null) {
-            String username = UUID.randomUUID().toString();
-            getSharedPreferences("PREFS", MODE_PRIVATE).edit().putString("username", username).apply();
+        if (getSharedPreferences("sharedPrefs", MODE_PRIVATE).getString("userID", null) == null) {  //check if userID has been set, if not generate a unique ID.
+            getSharedPreferences("sharedPrefs", MODE_PRIVATE).edit().putString("userID", UUID.randomUUID().toString()).apply();
+            getSharedPreferences("sharedPrefs", MODE_PRIVATE).edit().putString("distanceMetric", "0").apply();
+
         }
 
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {   //check for location permission
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);  //ask for permission if not granted
         } else {
-            openMainActivity();
+            openMainActivity(); //open main activity if permission granted
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) { //upon user granting/denying permission
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openMainActivity();
+
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) { //if permission granted
+            openMainActivity(); //open main activity
         } else {
-            //ask for permission again
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);  //ask for permission again
             } else {
                 openMainActivity();
             }

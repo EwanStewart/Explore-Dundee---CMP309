@@ -17,21 +17,34 @@ public class ActivitiesAdapter extends ArrayAdapter<String[]> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        /* Get the contacts data for this position. */
-        String[] contact = getItem(position);
-        /* Check if an existing view is being reused, otherwise inflate the view. */
+        String[] activity = getItem(position);
+
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.activities_layout, parent, false);
         }
-        /* Lookup views. */
-        TextView display_name = (TextView) convertView.findViewById(R.id.display_name);
-        TextView display_email = (TextView) convertView.findViewById(R.id.display_email);
-        TextView display_phone = (TextView) convertView.findViewById(R.id.display_phone);
-;
 
-        display_name.setText("Landmarks Visited: " + contact[0]);
-        display_email.setText("Total Distance Travelled: " + String.format("%.2f", Double.parseDouble(contact[1])) + "km");
-        display_phone.setText("Total Time: " + contact[2]);
+        String distanceMetric = getContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "notFound");
+
+        TextView txtViewLandmarks = (TextView) convertView.findViewById(R.id.txtViewLandmarks);
+        TextView txtViewTotalDistance = (TextView) convertView.findViewById(R.id.txtViewTotalDistance);
+        TextView txtViewTotalTime = (TextView) convertView.findViewById(R.id.txtViewTotalTime);
+;
+        txtViewLandmarks.setText(activity[1]);
+
+
+        if (distanceMetric.equals("0")) {
+            double km = Double.parseDouble(activity[2]);
+            txtViewTotalDistance.setText("Total Distanced Travelled: "  + String.format("%.2f", km) + " km");
+        } else {
+            double miles = Double.parseDouble(activity[2]) * 0.621371;
+            miles = Math.round(miles * 100.0) / 100.0;
+
+            txtViewTotalDistance.setText("Total Distanced Travelled: " + String.valueOf(miles) + " miles");
+        }
+
+        txtViewTotalTime.setText("Total Time: " + activity[3]);
+
+
         return convertView;
     }
 }

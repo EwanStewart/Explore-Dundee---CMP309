@@ -53,22 +53,10 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:text="Community Activities"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
         <include
             layout="@layout/activity_activities_list"
-            android:layout_width="match_parent"
-            android:layout_height="453dp" />
+            android:layout_width="720dp"
+            android:layout_height="200dp" />
 
     </LinearLayout>
 
@@ -92,6 +80,32 @@
 
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/btnStartMaps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="#D3D3D3"
+                android:text="Start Activity"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -99,20 +113,6 @@
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:gravity="right">
-
-            <!--create start button in the center of the footer-->
-            <Button
-                android:id="@+id/btnStartMaps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:text="Start Activity"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
-                app:backgroundTint="@null"
-                android:background="#D3D3D3" />
 
 
 
