@@ -4,4 +4,6 @@
     <string name="hello" />
     <string name="title_activity_maps">MapsActivity</string>
     <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
 </resources>

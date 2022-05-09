@@ -7,6 +7,12 @@
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/drawable/ic_baseline_assignment_ind_24.xml" value="0.2085" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/drawable/ic_baseline_directions_walk_24.xml" value="0.1735" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/drawable/ic_baseline_notifications_24.xml" value="0.2085" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activities_layout.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_activities_list.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_main.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_maps.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_splash_screen.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_upload.xml" value="0.31040564373897706" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activities_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_activities_list.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_activity_list.xml" value="0.36666666666666664" />
@@ -16,11 +22,15 @@
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_main2.xml" value="0.24479166666666666" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_maps.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_profile.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_settings.xml" value="0.2379182156133829" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_splash_screen.xml" value="0.14311043566362716" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_upload.xml" value="0.33" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/contact_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/fragment_item.xml" value="0.24479166666666666" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/fragment_item_list.xml" value="0.23072916666666668" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/profile_activities_list.xml" value="0.26197916666666665" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/user_activities_list.xml" value="0.3333333333333333" />
       </map>
     </option>
   </component>

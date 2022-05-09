@@ -73,8 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String landmarksVisited = this.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).getString("landmarksVisited", "");
-        landmarksVisited = "";
+        String landmarksVisited = "";
         this.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).edit().putString("landmarksVisited", landmarksVisited).apply();
 
 
@@ -152,7 +151,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     float distance = results[0] / 1000;
                     totalDistance += distance;
                     TextView distanceText = findViewById(R.id.txtViewDistance);
-                    distanceText.setText("Distance Travelled: " + String.format("%.2f", totalDistance) + " KM");
+
+                    String distanceMetric = getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "notFound");
+
+
+                    if (distanceMetric.equals("0")) {
+                        double km = totalDistance;
+                        distanceText.setText("Total Distanced Travelled: "  + String.format("%.2f", km) + " km");
+                    } else {
+                        double miles = totalDistance * 0.621371;
+                        miles = Math.round(miles * 100.0) / 100.0;
+
+                        distanceText.setText("Total Distanced Travelled: " + String.valueOf(miles) + " miles");
+                    }
+                   // distanceText.setText("Distance Travelled: " + String.format("%.2f", totalDistance) + " KM");
 
                 }
 
