@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.UUID;
 
 public class SplashScreen extends AppCompatActivity {
+    int counter = 0;
 
     public void openMainActivity() {    //open main activity after 2 seconds
         new Handler().postDelayed(() -> {
@@ -18,6 +21,18 @@ public class SplashScreen extends AppCompatActivity {
             startActivity(intent);
             finish();
         }, 2000);
+    }
+
+    public void popupMessage(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("In order to use the full functionality of the app, please allow location access.");
+        alertDialogBuilder.setTitle("Location Access");
+        alertDialogBuilder.setNegativeButton("Proceed", (dialogInterface, i) -> {
+            Log.d("internet","Ok btn pressed");
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -39,18 +54,28 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) { //upon user granting/denying permission
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) { //if permission granted
-            openMainActivity(); //open main activity
-        } else {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);  //ask for permission again
-            } else {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) { //if permission granted
+                    openMainActivity(); //open main activity
+                } else {
+                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        popupMessage(); //if permission denied, show popup message
+                    } else {
+                        openMainActivity();
+                    }
+                    return;
+                }
+            } break;
+            case 2: {
                 openMainActivity();
-            }
+            } break;
         }
     }
 

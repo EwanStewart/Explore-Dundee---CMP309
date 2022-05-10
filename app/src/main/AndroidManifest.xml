@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CMP309CWK">
         <activity
+            android:name=".DialogActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
@@ -33,9 +36,8 @@
         <receiver
             android:name=".GeofenceBroadcastReceiver"
             android:enabled="true"
-            android:priority="999">
-            android:exported="true">
-        </receiver>
+            android:exported="true"
+            android:priority="999"></receiver>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

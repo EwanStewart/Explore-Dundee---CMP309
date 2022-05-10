@@ -20,7 +20,7 @@ public class ActivitiesAdapter extends ArrayAdapter<String[]> {
         String[] activity = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activities_layout, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_individual_list_element, parent, false);
         }
 
         String distanceMetric = getContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "notFound");

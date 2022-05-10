@@ -10,10 +10,19 @@ import com.google.android.gms.location.GeofencingEvent;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
-    private String getPointOfInterestName(Context context, String requestId) {
-        int id = Integer.parseInt(requestId);
-        //appendLandmarksVisited(context, id);
-        switch (id) {
+    public void onReceive(Context context, Intent intent) {
+        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
+        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
+            String geofenceTransitionString = getGeofenceTransitionDetails(geofencingEvent);
+            String pointOfInterestName = appendLandmarksVisited(context, geofenceTransitionString);
+            Toast.makeText(context, "You have entered " + pointOfInterestName, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private String getPointOfInterestName(String requestId) {
+        switch (Integer.parseInt(requestId)) {
             case 0:
                 return "Tannadice Park";
             case 1:
@@ -37,7 +46,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     public String appendLandmarksVisited(Context context, String landmarkCode) {
 
-        String landmarkString = getPointOfInterestName(context, landmarkCode);
+        String landmarkString = getPointOfInterestName(landmarkCode);
 
         if (context.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).contains("landmarksVisited")) {
             String landmarksVisited = context.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).getString("landmarksVisited", "");
@@ -46,28 +55,15 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 context.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).edit().putString("landmarksVisited", landmarksVisited).apply();
             }
         } else {
-            String landmarksVisited = landmarkString;
-            context.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).edit().putString("landmarksVisited", landmarksVisited).apply();
+            context.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).edit().putString("landmarksVisited", landmarkString).apply();
         }
 
         return landmarkString;
     }
 
-    private String getGeofenceTransitionDetails(Context context, GeofencingEvent geofencingEvent) {
-        //LatLng latLng = new LatLng(geofencingEvent.getTriggeringLocation().getLatitude(), geofencingEvent.getTriggeringLocation().getLongitude());
+    private String getGeofenceTransitionDetails(GeofencingEvent geofencingEvent) {
         return geofencingEvent.getTriggeringGeofences().get(0).getRequestId();
     }
 
-
-
-    public void onReceive(Context context, Intent intent) {
-        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-        int geofenceTransition = geofencingEvent.getGeofenceTransition();
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
-            String geofenceTransitionString = getGeofenceTransitionDetails(context, geofencingEvent);
-            String pointOfInterestName = appendLandmarksVisited(context, geofenceTransitionString);
-            Toast.makeText(context, "You have entered " + pointOfInterestName, Toast.LENGTH_LONG).show();
-        }
-    }
 
 }
