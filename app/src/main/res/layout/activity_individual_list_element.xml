@@ -8,9 +8,10 @@
         android:id="@+id/txtViewLandmarks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="landmarks"
         android:padding="10dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="landmarks"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/txtViewTotalDistance"

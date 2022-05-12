@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,13 +17,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class uploadActivity extends AppCompatActivity {
-    private GoogleMap mMap;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     String landmarksVisitedString;
     Bundle bundle;
-
     public static class User {
 
         public String totalDistance;
@@ -49,20 +46,23 @@ public class uploadActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         TextView landmarksVisitedTextView = findViewById(R.id.txtViewLandmarksVisited);
 
-
-
         bundle = getIntent().getExtras();
 
-        if(bundle.getString("landmarksVisited") != null){
+        if(bundle.containsKey("landmarksVisited")){
             String landmarksVisitedString = bundle.getString("landmarksVisited");
-            landmarksVisitedString = landmarksVisitedString.substring(1);
+            if(landmarksVisitedString.charAt(0) == ','){
+                landmarksVisitedString = landmarksVisitedString.substring(1);
+            }
             landmarksVisitedTextView.setText("Landmarks Visited: " + landmarksVisitedString);
+
         } else {
             landmarksVisitedString = "No landmarks visited";
             landmarksVisitedTextView.setText("Landmarks Visited: No landmarks visited");
         }
 
-        String distanceMetric = getApplication().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "notFound");
+        this.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).edit().putString("landmarksVisited", "").apply();
+
+        String distanceMetric = getApplication().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "0");
 
         TextView distanceText = findViewById(R.id.txtViewDistance);
 
@@ -80,7 +80,6 @@ public class uploadActivity extends AppCompatActivity {
         TextView timeText = findViewById(R.id.txtTotalTime);
         timeText.setText("Total time: " +  bundle.getString("time"));
 
-        //set the onclick listener to onClick
         Button button = findViewById(R.id.btnSave);
         button.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
@@ -94,8 +93,6 @@ public class uploadActivity extends AppCompatActivity {
 
 
             HashMap<String, User> user = new HashMap<>();
-
-
             String dateTime = LocalDateTime.now().toString();
 
             TextView landmarksVisitedTextView1 = findViewById(R.id.txtViewLandmarksVisited);
@@ -114,8 +111,5 @@ public class uploadActivity extends AppCompatActivity {
             finish();
         });
     }
-
-
-
 
 }

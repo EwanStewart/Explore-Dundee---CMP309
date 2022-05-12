@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,12 +22,11 @@ public class SplashScreen extends AppCompatActivity {
         }, 2000);
     }
 
-    public void popupMessage(){
+    public void popupMessage(){ //show dialog explaining why location permission is needed
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("In order to use the full functionality of the app, please allow location access.");
         alertDialogBuilder.setTitle("Location Access");
         alertDialogBuilder.setNegativeButton("Proceed", (dialogInterface, i) -> {
-            Log.d("internet","Ok btn pressed");
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
