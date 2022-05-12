@@ -9,6 +9,8 @@
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/drawable/ic_baseline_notifications_24.xml" value="0.2085" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activities_layout.xml" value="0.31040564373897706" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_activities_list.xml" value="0.31040564373897706" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_individual_list_element.xml" value="0.2173721340388007" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_list.xml" value="0.2173721340388007" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_main.xml" value="0.31040564373897706" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_maps.xml" value="0.31040564373897706" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout-land/activity_profile.xml" value="0.31040564373897706" />
@@ -21,7 +23,9 @@
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_contacts_list.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_dialog.xml" value="0.2630208333333333" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_geofence_broadcast_receiver.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_individual_list_element.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_layout.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_list.xml" value="0.25" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_main2.xml" value="0.24479166666666666" />
         <entry key="..\:/Users/ewans/Desktop/CMP309CWK/app/src/main/res/layout/activity_maps.xml" value="0.36666666666666664" />
