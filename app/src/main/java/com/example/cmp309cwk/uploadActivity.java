@@ -22,7 +22,7 @@ public class uploadActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     String landmarksVisitedString;
     Bundle bundle;
-    public static class User {
+    public static class User { //Class to store user data
 
         public String totalDistance;
         public String totalTime;
@@ -48,19 +48,19 @@ public class uploadActivity extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
 
-        if(bundle.containsKey("landmarksVisited")){
+        if(bundle.containsKey("landmarksVisited")){ //If landmarksVisited is not null
             String landmarksVisitedString = bundle.getString("landmarksVisited");
             if(landmarksVisitedString.charAt(0) == ','){
                 landmarksVisitedString = landmarksVisitedString.substring(1);
             }
-            landmarksVisitedTextView.setText("Landmarks Visited: " + landmarksVisitedString);
+            landmarksVisitedTextView.setText("Landmarks Visited: " + landmarksVisitedString); //Set text to landmarksVisited
 
-        } else {
+        } else { //If landmarksVisited is null
             landmarksVisitedString = "No landmarks visited";
-            landmarksVisitedTextView.setText("Landmarks Visited: No landmarks visited");
+            landmarksVisitedTextView.setText("Landmarks Visited: No landmarks visited"); //Set text to landmarksVisited
         }
 
-        this.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).edit().putString("landmarksVisited", "").apply();
+        this.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).edit().putString("landmarksVisited", "").apply(); //Clear landmarksVisited
 
         String distanceMetric = getApplication().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "0");
 
@@ -81,16 +81,15 @@ public class uploadActivity extends AppCompatActivity {
         timeText.setText("Total time: " +  bundle.getString("time"));
 
         Button button = findViewById(R.id.btnSave);
-        button.setOnClickListener(v -> {
+        button.setOnClickListener(v -> { //When upload is clicked
+
             SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
             String username = sharedPreferences.getString("userID", UUID.randomUUID().toString());
-            bundle.putString("username", username);
 
             firebaseDatabase = FirebaseDatabase.getInstance();
 
             databaseReference = firebaseDatabase.getReference("activities");
-            DatabaseReference ref = databaseReference.child(UUID.randomUUID().toString());
-
+            DatabaseReference ref = databaseReference.child(UUID.randomUUID().toString());  //Create a new child in the database
 
             HashMap<String, User> user = new HashMap<>();
             String dateTime = LocalDateTime.now().toString();

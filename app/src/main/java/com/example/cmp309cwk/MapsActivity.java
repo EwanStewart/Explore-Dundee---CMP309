@@ -99,7 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         //check for fine location permission
 
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         } else {
@@ -145,41 +144,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     LocationCallback locationCallback = new LocationCallback() {
         @Override
-        public void onLocationResult(@NonNull LocationResult locationResult) {
+        public void onLocationResult(@NonNull LocationResult locationResult) {  //on location update
             for (Location location : locationResult.getLocations()) {
                 LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));    //move camera to current location
                 currentPositionMarker.setPosition(currentLocation);
 
                 if (!LatLongPoints.isEmpty()) {
-                    LatLng last = LatLongPoints.get(LatLongPoints.size() - 1);
+                    LatLng last = LatLongPoints.get(LatLongPoints.size() - 1);  //get last point
                     float[] results = new float[1];
-                    Location.distanceBetween(last.latitude, last.longitude, currentLocation.latitude, currentLocation.longitude, results);
-                    float distance = results[0] / 1000;
+                    Location.distanceBetween(last.latitude, last.longitude, currentLocation.latitude, currentLocation.longitude, results); //calculate distance between last point and current point
+                    float distance = results[0] / 1000; //convert to km
                     totalDistance += distance;
                     TextView distanceText = findViewById(R.id.txtViewDistance);
 
-                    String distanceMetric = getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "0");
+                    String distanceMetric = getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getString("distanceMetric", "0"); //get distance metric
 
 
                     if (distanceMetric.equals("0")) {
                         double km = totalDistance;
-                        distanceText.setText("Total Distanced Travelled: "  + String.format("%.2f", km) + " km");
+                        distanceText.setText("Total Distanced Travelled: "  + String.format("%.2f", km) + " km"); //display distance in km
                     } else {
                         double miles = totalDistance * 0.621371;
                         miles = Math.round(miles * 100.0) / 100.0;
 
-                        distanceText.setText("Total Distanced Travelled: " + String.valueOf(miles) + " miles");
+                        distanceText.setText("Total Distanced Travelled: " + String.valueOf(miles) + " miles"); //display distance in miles
                     }
                 }
 
-                LatLongPoints.add(currentLocation);
-                drawGPSLine(LatLongPoints);
+                LatLongPoints.add(currentLocation); //add current location to list of points
+                drawGPSLine(LatLongPoints); //draw line between points
             }
         }
     };
 
-    private PendingIntent getGeofencePendingIntent() {
+    private PendingIntent getGeofencePendingIntent() { //create pending intent
         if (geofencePendingIntent != null) {
             return geofencePendingIntent;
         }
@@ -205,12 +204,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void drawGPSLine(ArrayList<LatLng> gpsPoints) {
-        PolylineOptions line = new PolylineOptions().width(5).color(Color.BLUE);
+        PolylineOptions line = new PolylineOptions().width(5).color(Color.BLUE); //create line
 
-        for (int i = 0; i < gpsPoints.size(); i++) {
+        for (int i = 0; i < gpsPoints.size(); i++) { //add points to line
             line.add(gpsPoints.get(i));
         }
-        mMap.addPolyline(line);
+        mMap.addPolyline(line); //draw line
     }
 
 
@@ -232,10 +231,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        currentPositionMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(56.462002, -2.970700)).title("My Location"));
+        currentPositionMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(56.462002, -2.970700)).title("My Location")); //add marker to current location
         geofencingClient = LocationServices.getGeofencingClient(this);
 
         ArrayList<LatLng> pointsOfInterest = new ArrayList<>();
+
+        //add points of interest to list
 
         LatLng tannadice_park = new LatLng(56.47479113892371, -2.968978643868099);
         LatLng dens_park = new LatLng(56.47512756806344, -2.971774961627042);
@@ -255,14 +256,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         pointsOfInterest.add(overgate);
         pointsOfInterest.add(wellgate);
 
-        for (int i = 0; i < pointsOfInterest.size(); i++) {
+        for (int i = 0; i < pointsOfInterest.size(); i++) { //for each landmark build a geofence
             buildGeofence(i, pointsOfInterest.get(i), 75);
         }
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) { //if permission not granted
             return;
         }
-        geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
+        geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent()) //add geofences
                 .addOnSuccessListener(this, aVoid -> Log.i("TAG", "Geofence success"))
                 .addOnFailureListener(this, e -> Log.i("TAG", "Geofence failed"));
 

@@ -14,7 +14,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){  //check transition type from triggering geofence
             String geofenceTransitionString = getGeofenceTransitionDetails(geofencingEvent);
             String pointOfInterestName = appendLandmarksVisited(context, geofenceTransitionString);
             Toast.makeText(context, "You have entered " + pointOfInterestName, Toast.LENGTH_LONG).show();
@@ -47,6 +47,9 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     public String appendLandmarksVisited(Context context, String landmarkCode) {
 
         String landmarkString = getPointOfInterestName(landmarkCode);
+
+        //if no landmarks visited, set landmarkString to first landmark visited
+        //if not first landmark visited, append landmarkString to landmarksVisited
 
         if (context.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).contains("landmarksVisited")) {
             String landmarksVisited = context.getSharedPreferences("landmarksVisited", Context.MODE_PRIVATE).getString("landmarksVisited", "");
