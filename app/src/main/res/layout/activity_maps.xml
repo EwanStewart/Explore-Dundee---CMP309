@@ -72,7 +72,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginRight="20dp"
                 android:text="End"
-                android:textSize="20sp"></Button>
+                android:textSize="15sp"></Button>
 
 
         </LinearLayout>

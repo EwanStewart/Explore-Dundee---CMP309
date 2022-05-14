@@ -69,12 +69,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="#ffffff">
+            android:background="#ffffff"
+            >
 
             <include
                 layout="@layout/activity_list"
                 android:layout_width="match_parent"
-                android:layout_height="576dp" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center"/>
 
 
         </LinearLayout>
@@ -110,7 +112,6 @@
             android:layout_marginEnd="10dp"
             android:gravity="right">
 
-            <!--create start button in the center of the footer-->
             <Button
                 android:id="@+id/btnStartMaps"
                 android:layout_width="wrap_content"
