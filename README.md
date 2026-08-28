@@ -22,8 +22,7 @@ Location tracking and places visited using Geofencing and Google Maps API.
 
 ## Google Maps API key
 
-The map needs a Google Maps Android API key. This repository ships without one,
-so `AndroidManifest.xml` carries a `#` placeholder and the map draws blank.
+The map needs a Google Maps Android API key.
 
 Create a key in the Google Cloud console and enable "Maps SDK for Android".
 Restrict it to the package name `com.example.cmp309cwk` and to the SHA-1
