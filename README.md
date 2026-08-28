@@ -19,3 +19,19 @@ Location tracking and places visited using Geofencing and Google Maps API.
 ![image](https://github.com/EwanStewart/Explore-Dundee---CMP309/assets/80590593/2da3f0de-f6f4-417c-904f-881ad912e791)
 ![image](https://github.com/EwanStewart/Explore-Dundee---CMP309/assets/80590593/406e96a9-2887-4e9c-bf47-77f7e7a8de53)
 
+
+## Google Maps API key
+
+The map needs a Google Maps Android API key.
+
+Create a key in the Google Cloud console and enable "Maps SDK for Android".
+Restrict it to the package name `com.example.cmp309cwk` and to the SHA-1
+fingerprint of your signing certificate.
+
+Then put the key in `app/src/main/AndroidManifest.xml`:
+
+```xml
+<meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="YOUR_KEY_HERE" />
+```
