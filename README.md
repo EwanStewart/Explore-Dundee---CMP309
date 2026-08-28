@@ -19,3 +19,37 @@ Location tracking and places visited using Geofencing and Google Maps API.
 ![image](https://github.com/EwanStewart/Explore-Dundee---CMP309/assets/80590593/2da3f0de-f6f4-417c-904f-881ad912e791)
 ![image](https://github.com/EwanStewart/Explore-Dundee---CMP309/assets/80590593/406e96a9-2887-4e9c-bf47-77f7e7a8de53)
 
+
+## Google Maps API key
+
+The map needs a Google Maps Android API key. This repository ships without one,
+so `AndroidManifest.xml` carries a `#` placeholder and the map draws blank.
+
+Create a key in the Google Cloud console and enable "Maps SDK for Android".
+Restrict it to the package name `com.example.cmp309cwk` and to the SHA-1
+fingerprint of your signing certificate.
+
+Then put the key in `app/src/main/AndroidManifest.xml`:
+
+```xml
+<meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="YOUR_KEY_HERE" />
+```
+
+Do not commit the key.
+
+### Keeping the key out of the manifest
+
+The build already applies the secrets Gradle plugin, so the key can live outside
+version control. Add this line to `local.properties`, which git ignores:
+
+```
+MAPS_API_KEY=your key here
+```
+
+Then set the manifest value to `${MAPS_API_KEY}` instead of the key itself.
+
+`local.properties` must exist even when it is empty. The secrets plugin fails
+the build outright when the file is missing, which is why the CI workflow
+creates one before it builds.
