@@ -18,6 +18,9 @@ jobs:
           java-version: '11'
           cache: gradle
 
+      - name: Create local.properties
+        run: touch local.properties
+
       - name: Assemble debug APK
         run: ./gradlew assembleDebug --no-daemon
 
