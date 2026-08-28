@@ -36,20 +36,3 @@ Then put the key in `app/src/main/AndroidManifest.xml`:
     android:name="com.google.android.geo.API_KEY"
     android:value="YOUR_KEY_HERE" />
 ```
-
-Do not commit the key.
-
-### Keeping the key out of the manifest
-
-The build already applies the secrets Gradle plugin, so the key can live outside
-version control. Add this line to `local.properties`, which git ignores:
-
-```
-MAPS_API_KEY=your key here
-```
-
-Then set the manifest value to `${MAPS_API_KEY}` instead of the key itself.
-
-`local.properties` must exist even when it is empty. The secrets plugin fails
-the build outright when the file is missing, which is why the CI workflow
-creates one before it builds.
